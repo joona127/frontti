@@ -4,9 +4,11 @@ import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-material.css';
 import Button from '@material-ui/core/Button';
 import Snackbar from '@material-ui/core/Snackbar';
+import AddCar from './AddCar';
 
 function Carlist() {
     const [cars, setCars] = useState([]);
+    const [open, setOpen] = React.useState(false);
 
     const gridRef = useRef();
 
@@ -28,8 +30,13 @@ function Carlist() {
             method: 'DELETE'
         })
         .then(_ => gridRef.current.refreshCells({rowNodes: getCars()}))
+        .then(_ => setOpen(true))
         .catch(err => console.error(err))
         }
+    }
+
+    const closeSnackbar = () => {
+        setOpen(false);
     }
 
     const columns = [
@@ -50,6 +57,8 @@ function Carlist() {
         }
     ]
 return (
+    <div>
+        <AddCar />
     <div className="ag-theme-material" style={{height:'700px', width:'90%', margin:'auto'}}>
         <AgGridReact
         ref={gridRef}
@@ -61,6 +70,13 @@ return (
             rowData={cars}
             >
         </AgGridReact>
+        <Snackbar 
+        open={open}
+        autoHideDuration={3000}
+        onClose={closeSnackbar}
+        message="Car deleted succesfully"
+        />
+    </div>
     </div>
 );
 }
