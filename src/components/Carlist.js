@@ -35,6 +35,16 @@ function Carlist() {
         }
     }
 
+    const addCar = (newCar) => {
+        fetch('https://carstockrest.herokuapp.com/cars', {
+            method: 'POST',
+            headers: {'Content-type' : 'application/json'},
+            body: JSON.stringify(newCar)
+        })
+        .then(_ => gridRef.current.refreshCells({rowNodes: getCars()}))
+        .catch(err => console.error(err))
+    }
+
     const closeSnackbar = () => {
         setOpen(false);
     }
@@ -58,7 +68,7 @@ function Carlist() {
     ]
 return (
     <div>
-        <AddCar />
+        <AddCar addCar={addCar} />
     <div className="ag-theme-material" style={{height:'700px', width:'90%', margin:'auto'}}>
         <AgGridReact
         ref={gridRef}

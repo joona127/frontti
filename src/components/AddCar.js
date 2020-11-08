@@ -7,7 +7,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 
 
-function AddCar() {
+function AddCar(props) {
    const [car, setCar] = useState({brand: '', model: '', color: '', fuel: '', year: '', price: ''})
    const [open, setOpen] = React.useState(false);
 
@@ -15,12 +15,17 @@ function AddCar() {
     setOpen(true);
   };
 
+  const handleSave = () => {
+     props.addCar(car);
+     handleClose();
+  }
+
   const handleClose = () => {
     setOpen(false);
   };
 
   const inputChanged = (event) => {
-     setCar({...car, [event.target.name]: event.target.value})
+     setCar({...car, [event.target.name]: event.target.value});
   }
 
   return (
@@ -85,7 +90,7 @@ function AddCar() {
           <Button onClick={handleClose} color="primary">
             Cancel
           </Button>
-          <Button onClick={handleClose} color="primary">
+          <Button onClick={handleSave} color="primary">
             Save
           </Button>
         </DialogActions>
