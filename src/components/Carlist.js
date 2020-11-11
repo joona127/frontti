@@ -5,6 +5,7 @@ import 'ag-grid-community/dist/styles/ag-theme-material.css';
 import Button from '@material-ui/core/Button';
 import Snackbar from '@material-ui/core/Snackbar';
 import AddCar from './AddCar';
+import EditCar from './EditCar';
 
 function Carlist() {
     const [cars, setCars] = useState([]);
@@ -45,6 +46,16 @@ function Carlist() {
         .catch(err => console.error(err))
     }
 
+    const updateCar = (link, car) => {
+        fetch(link, {
+            method: 'PUT',
+            headers: {'Content-type' : 'application/json'},
+            body: JSON.stringify(car)
+        })
+        .then(_ => gridRef.current.refreshCells({rowNodes: getCars()}))
+        .catch(err => console.error(err))
+    }
+
     const closeSnackbar = () => {
         setOpen(false);
     }
@@ -56,6 +67,12 @@ function Carlist() {
         {headerName: 'Fuel', field: 'fuel', sortable: true, filter: true},
         {headerName: 'Year', field: 'year', sortable: true, filter: true},
         {headerName: 'Price', field: 'price', sortable: true, filter: true},
+        {
+            headerName: '', 
+            field: '_links.self.href', 
+            width: 90, 
+            cellRendererFramework: params => <EditCar updateCar={updateCar} params={params} />
+        },
         {
             headerName: '', 
             field: '_links.self.href', 
